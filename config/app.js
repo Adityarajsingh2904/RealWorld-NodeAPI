@@ -42,7 +42,7 @@ app.use(function (req, res, next) {
 });
 
 if (!isProduction) {
-  app.use(function (err, req, res, next) {
+  app.use(function (err, req, res, _next) {
     console.log(err.stack);
     res.status(err.status || 500);
     res.json({
@@ -54,7 +54,7 @@ if (!isProduction) {
   });
 }
 
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res, _next) {
   res.status(err.status || 500);
   res.json({
     errors: {
