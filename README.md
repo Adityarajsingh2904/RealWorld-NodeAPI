@@ -53,6 +53,14 @@ npm install
 npm run dev
 ```
 
+### Configuration
+
+Set the session secret used by Express. For development you can use any value:
+
+```bash
+export SESSION_SECRET=your_secret
+```
+
 ### MongoDB with Docker
 
 ```bash
