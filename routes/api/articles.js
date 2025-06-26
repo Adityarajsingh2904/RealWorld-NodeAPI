@@ -167,7 +167,7 @@ router.post('/', auth.required, function(req, res, next) {
 router.get('/:article', auth.optional, function(req, res, next) {
   Promise.all([
     req.payload ? User.findById(req.payload.id) : null,
-    req.article.populate('author').execPopulate()
+    req.article.populate('author')
   ]).then(function(results){
     var user = results[0];
 
@@ -217,18 +217,20 @@ router.put('/:article', auth.required, function(req, res, next) {
  * @param   {slug} article
  * @return  204 No Content or 403 if not author
  */
-router.delete('/:article', auth.required, function(req, res, next) {
-  User.findById(req.payload.id).then(function(user){
+router.delete('/:article', auth.required, async function(req, res, next) {
+  try {
+    const user = await User.findById(req.payload.id);
     if (!user) { return res.sendStatus(401); }
 
     if(req.article.author._id.toString() === req.payload.id.toString()){
-      return req.article.remove().then(function(){
-        return res.sendStatus(204);
-      });
+      await req.article.deleteOne();
+      return res.sendStatus(204);
     } else {
       return res.sendStatus(403);
     }
-  }).catch(next);
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /**
@@ -280,9 +282,10 @@ router.delete('/:article/favorite', auth.required, function(req, res, next) {
  * @param   {slug} article
  * @return  { comments: [] }
  */
-router.get('/:article/comments', auth.optional, function(req, res, next){
-  Promise.resolve(req.payload ? User.findById(req.payload.id) : null).then(function(user){
-    return req.article.populate({
+router.get('/:article/comments', auth.optional, async function(req, res, next){
+  try {
+    const user = req.payload ? await User.findById(req.payload.id) : null;
+    await req.article.populate({
       path: 'comments',
       populate: {
         path: 'author'
@@ -292,12 +295,13 @@ router.get('/:article/comments', auth.optional, function(req, res, next){
           createdAt: 'desc'
         }
       }
-    }).execPopulate().then(function(article) {
-      return res.json({comments: req.article.comments.map(function(comment){
-        return comment.toJSONFor(user);
-      })});
     });
-  }).catch(next);
+    return res.json({comments: req.article.comments.map(function(comment){
+      return comment.toJSONFor(user);
+    })});
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /**
@@ -338,7 +342,7 @@ router.delete('/:article/comments/:comment', auth.required, function(req, res, n
   if(req.comment.author.toString() === req.payload.id.toString()){
     req.article.comments.remove(req.comment._id);
     req.article.save()
-      .then(Comment.find({_id: req.comment._id}).remove().exec())
+      .then(Comment.deleteOne({ _id: req.comment._id }))
       .then(function(){
         res.sendStatus(204);
       });
