@@ -53,6 +53,13 @@ router.put('/user', auth.required, function(req, res, next){
   }).catch(next);
 });
 
+/**
+ * @route   POST /api/users/login
+ * @desc    Authenticate user and return JWT
+ * @access  Public
+ * @body    { user: { email, password } }
+ * @return  { user: { token, email, username, bio, image } }
+ */
 router.post('/users/login', function(req, res, next){
   if(!req.body.user.email){
     return res.status(422).json({errors: {email: "can't be blank"}});
@@ -74,6 +81,13 @@ router.post('/users/login', function(req, res, next){
   })(req, res, next);
 });
 
+/**
+ * @route   POST /api/users
+ * @desc    Register a new user
+ * @access  Public
+ * @body    { user: { username, email, password } }
+ * @return  { user: { token, email, username, bio?, image? } }
+ */
 router.post(
   '/users',
   [check('email').isEmail(), check('password').isLength({ min: 6 })],
