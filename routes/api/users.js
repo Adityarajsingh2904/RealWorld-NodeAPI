@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var router = require('express').Router();
 var passport = require('passport');
+var { check, validationResult } = require('express-validator');
 var User = mongoose.model('User');
 var auth = require('../auth');
 
@@ -60,16 +61,27 @@ router.post('/users/login', function(req, res, next){
   })(req, res, next);
 });
 
-router.post('/users', function(req, res, next){
-  var user = new User();
+router.post(
+  '/users',
+  [check('email').isEmail(), check('password').isLength({ min: 6 })],
+  function (req, res, next) {
+    var errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.mapped() });
+    }
 
-  user.username = req.body.user.username;
-  user.email = req.body.user.email;
-  user.setPassword(req.body.user.password);
+    var user = new User();
 
-  user.save().then(function(){
-    return res.json({user: user.toAuthJSON()});
-  }).catch(next);
-});
+    user.username = req.body.user.username;
+    user.email = req.body.user.email;
+    user.setPassword(req.body.user.password);
+
+    user.save()
+      .then(function () {
+        return res.json({ user: user.toAuthJSON() });
+      })
+      .catch(next);
+  }
+);
 
 module.exports = router;
