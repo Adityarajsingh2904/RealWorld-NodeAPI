@@ -30,4 +30,8 @@ jobs:
       with:
         node-version: 20
     - run: npm install
+    - name: Start server
+      run: |
+        npm start &
+        sleep 5
     - run: npm run test

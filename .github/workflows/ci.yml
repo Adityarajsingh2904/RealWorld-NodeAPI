@@ -22,4 +22,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: npm install -g newman
+      - name: Start server
+        run: |
+          npm start &
+          sleep 5
       - run: npm run test
