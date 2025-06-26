@@ -23,10 +23,12 @@ This fork is restructured, refined, and maintained by Aditya Raj Singh.
 
 ```
 RealWorld-NodeAPI/
-├── app.js               # Main Express app
+├── server.js            # Application entry point
+├── config/              # JWT / DB config
+│   ├── app.js           # Express configuration
+│   └── ...
 ├── routes/              # Express route controllers
 ├── models/              # Mongoose schemas
-├── config/              # JWT / DB config
 ├── tests/               # Postman tests
 ├── .travis.yml
 ├── package.json
