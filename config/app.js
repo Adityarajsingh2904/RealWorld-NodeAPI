@@ -20,13 +20,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname, '..', 'public')));
-const sessionSecret = process.env.SESSION_SECRET;
-if (!sessionSecret && !isProduction) {
-  console.warn('SESSION_SECRET not set. Using default for development.');
-}
 app.use(
   session({
-    secret: sessionSecret || 'conduit',
+    secret: 'conduit',
     cookie: { maxAge: 60000 },
     resave: false,
     saveUninitialized: false
