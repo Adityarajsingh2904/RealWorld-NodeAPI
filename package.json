@@ -36,7 +36,8 @@
     "request": "2.69.0",
     "slug": "0.9.1",
     "underscore": "1.8.3",
-    "helmet": "^7.0.0"
+    "helmet": "^7.0.0",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "newman": "^6.0.0",

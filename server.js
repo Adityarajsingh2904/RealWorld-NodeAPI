@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 const app = require('./config/app');
+const config = require('./config');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-if (isProduction) {
-  mongoose.connect(process.env.MONGODB_URI);
-} else {
-  mongoose.connect('mongodb://localhost/conduit');
+mongoose.connect(config.mongoURI || 'mongodb://localhost/conduit');
+if (!isProduction) {
   mongoose.set('debug', true);
 }
 
