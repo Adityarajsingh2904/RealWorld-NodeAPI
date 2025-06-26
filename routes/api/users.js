@@ -5,6 +5,12 @@ var { check, validationResult } = require('express-validator');
 var User = mongoose.model('User');
 var auth = require('../auth');
 
+/**
+ * @route   GET /api/user
+ * @desc    Get current logged-in user's info
+ * @access  Private (requires JWT token)
+ * @return  { user: { email, token, username, bio, image } }
+ */
 router.get('/user', auth.required, function(req, res, next){
   User.findById(req.payload.id).then(function(user){
     if(!user){ return res.sendStatus(401); }
@@ -13,6 +19,13 @@ router.get('/user', auth.required, function(req, res, next){
   }).catch(next);
 });
 
+/**
+ * @route   PUT /api/user
+ * @desc    Update current user's profile fields
+ * @access  Private (requires JWT token)
+ * @body    { user: { username?, email?, bio?, image?, password? } }
+ * @return  { user: { email, token, username, bio, image } }
+ */
 router.put('/user', auth.required, function(req, res, next){
   User.findById(req.payload.id).then(function(user){
     if(!user){ return res.sendStatus(401); }
