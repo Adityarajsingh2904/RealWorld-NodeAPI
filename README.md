@@ -63,8 +63,19 @@ npm run mongo:start
 
 ## 📮 API Testing
 
+This project uses **Newman** to run the Postman collection. Newman is installed
+as a development dependency when you run `npm install`.
+
 ```bash
 npm test
+```
+
+If you prefer using a global installation, install Newman and run the collection
+directly:
+
+```bash
+npm install -g newman
+newman run ./tests/api-tests.postman.json -e ./tests/env-api-tests.postman.json
 ```
 
 ---
