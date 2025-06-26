@@ -6,11 +6,13 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const errorhandler = require('errorhandler');
+const helmet = require('helmet');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 const app = express();
 
+app.use(helmet());
 app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
