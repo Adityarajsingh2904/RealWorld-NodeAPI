@@ -1,10 +1,17 @@
 language: node_js
-node_js: "8"
+node_js:
+  - "18"
 
-sudo: required
-services: mongodb
+services:
+  - mongodb
 
-install: yarn
+install:
+  - npm install
+  - npm install -g newman
 
-before_script: yarn start & sleep 5
-script: yarn test
+before_script:
+  - npm start &
+  - sleep 5
+
+script:
+  - npm test

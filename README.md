@@ -64,6 +64,7 @@ npm run mongo:start
 ## 📮 API Testing
 
 ```bash
+npm install -g newman
 npm test
 ```
 
