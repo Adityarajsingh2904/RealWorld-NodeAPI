@@ -54,6 +54,39 @@
           "response": []
         },
         {
+          "name": "Register - Missing Fields",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "tests['Status code is 422'] = responseCode.code === 422;"
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/users",
+            "method": "POST",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{}}"
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
           "name": "Login",
           "event": [{
             "listen": "test",
@@ -138,6 +171,75 @@
             "body": {
               "mode": "raw",
               "raw": "{\"user\":{\"email\":\"john@jacob.com\", \"password\":\"johnnyjacob\"}}"
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Register Second User",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "var responseJSON = JSON.parse(responseBody);",
+                "tests['Response contains \"user\" property'] = responseJSON.hasOwnProperty('user');"
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/users",
+            "method": "POST",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"mary@example.com\", \"password\":\"marypass\", \"username\":\"mary\"}}"
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Login Second User and Remember Token2",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "var responseJSON = JSON.parse(responseBody);",
+                "var user = responseJSON.user || {};",
+                "if(user.token){ postman.setEnvironmentVariable('token2', user.token); }"
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/users/login",
+            "method": "POST",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"mary@example.com\", \"password\":\"marypass\"}}"
             },
             "description": ""
           },
@@ -521,6 +623,36 @@
               "mode": "raw",
               "raw": ""
             },
+            "description": ""
+          },
+          "response": []
+        },
+                {
+          "name": "Feed - No Token",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "tests['Status code is 401'] = responseCode.code === 401;"
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/articles/feed",
+            "method": "GET",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {},
             "description": ""
           },
           "response": []
@@ -1363,6 +1495,82 @@
               {
                 "key": "Authorization",
                 "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "description": ""
+          },
+          "response": []
+        },
+                {
+          "name": "Update Article - Not Author",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "tests['Status code is 403'] = responseCode.code === 403;"
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/articles/{{slug}}",
+            "method": "PUT",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token2}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"article\":{\"body\":\"fail\"}}"
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Article - Not Author",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "tests['Status code is 403'] = responseCode.code === 403;"
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/articles/{{slug}}",
+            "method": "DELETE",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token2}}",
                 "description": ""
               }
             ],
