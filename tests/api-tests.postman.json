@@ -2822,6 +2822,75 @@
           "response": []
         },
         {
+          "name": "Follow Profile - No Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 401'] = responseCode.code === 401;"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/profiles/johnjacob/follow",
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"john@jacob.com\"}}"
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Unfollow Profile - No Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 401'] = responseCode.code === 401;"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/profiles/johnjacob/follow",
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {},
+            "description": ""
+          },
+          "response": []
+        },
+        {
           "name": "Profile - Not Found",
           "event": [
             {
