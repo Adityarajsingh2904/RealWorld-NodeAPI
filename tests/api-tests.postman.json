@@ -59,7 +59,6 @@
           "response": []
         },
         {
-
           "name": "Register - Invalid Email",
           "event": [
             {
@@ -113,7 +112,6 @@
             "method": "POST",
             "header": [
               {
-
                 "key": "Content-Type",
                 "value": "application/json",
                 "description": ""
@@ -126,9 +124,7 @@
             ],
             "body": {
               "mode": "raw",
-
               "raw": "{\"user\":{\"email\":\"short@jacob.com\", \"password\":\"short\", \"username\":\"short\"}}"
-
             },
             "description": ""
           },
@@ -231,7 +227,6 @@
           "response": []
         },
         {
-
           "name": "Login - Missing Email",
           "event": [
             {
@@ -321,7 +316,6 @@
             "method": "POST",
             "header": [
               {
-
                 "key": "Content-Type",
                 "value": "application/json",
                 "description": ""
@@ -334,16 +328,13 @@
             ],
             "body": {
               "mode": "raw",
-
               "raw": "{\"user\":{\"email\":\"second@user.com\", \"password\":\"secondpass\", \"username\":\"seconduser\"}}"
-
             },
             "description": ""
           },
           "response": []
         },
         {
-
           "name": "Login Second User",
           "event": [
             {
@@ -363,7 +354,6 @@
             "method": "POST",
             "header": [
               {
-
                 "key": "Content-Type",
                 "value": "application/json",
                 "description": ""
@@ -376,9 +366,7 @@
             ],
             "body": {
               "mode": "raw",
-
               "raw": "{\"user\":{\"email\":\"second@user.com\", \"password\":\"secondpass\"}}"
-
             },
             "description": ""
           },
@@ -714,8 +702,8 @@
             "description": ""
           },
           "response": []
-        }
-        ,{
+        },
+        {
           "name": "Register - Duplicate",
           "event": [
             {
@@ -751,21 +739,24 @@
           },
           "response": []
         },
-                {
+        {
           "name": "Feed - No Token",
-          "event": [{
-            "listen": "test",
-            "script": {
-              "type": "text/javascript",
-              "exec": [
-                "tests['Status code is 401'] = responseCode.code === 401;"
-              ]
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 401'] = responseCode.code === 401;"
+                ]
+              }
             }
-          }],
+          ],
           "request": {
             "url": "{{apiUrl}}/articles/feed",
             "method": "GET",
-            "header": [{
+            "header": [
+              {
                 "key": "Content-Type",
                 "value": "application/json",
                 "description": ""
@@ -885,6 +876,115 @@
               {
                 "key": "Authorization",
                 "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Recommended Articles",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var is200Response = responseCode.code === 200;",
+                  "",
+                  "tests['Response code is 200 OK'] = is200Response;",
+                  "",
+                  "if(is200Response){",
+                  "    var responseJSON = JSON.parse(responseBody);",
+                  "",
+                  "    tests['Response contains \"articles\" property'] = responseJSON.hasOwnProperty('articles');",
+                  "    tests['Response contains \"articlesCount\" property'] = responseJSON.hasOwnProperty('articlesCount');",
+                  "    tests['articlesCount is an integer'] = Number.isInteger(responseJSON.articlesCount);",
+                  "",
+                  "    if(responseJSON.articles.length){",
+                  "        var article = responseJSON.articles[0];",
+                  "",
+                  "        tests['Article has \"title\" property'] = article.hasOwnProperty('title');",
+                  "        tests['Article has \"slug\" property'] = article.hasOwnProperty('slug');",
+                  "        tests['Article has \"body\" property'] = article.hasOwnProperty('body');",
+                  "        tests['Article has \"createdAt\" property'] = article.hasOwnProperty('createdAt');",
+                  "        tests['Article\\'s \"createdAt\" property is an ISO 8601 timestamp'] = new Date(article.createdAt).toISOString() === article.createdAt;",
+                  "        tests['Article has \"updatedAt\" property'] = article.hasOwnProperty('updatedAt');",
+                  "        tests['Article\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = new Date(article.updatedAt).toISOString() === article.updatedAt;",
+                  "        tests['Article has \"description\" property'] = article.hasOwnProperty('description');",
+                  "        tests['Article has \"tagList\" property'] = article.hasOwnProperty('tagList');",
+                  "        tests['Article\\'s \"tagList\" property is an Array'] = Array.isArray(article.tagList);",
+                  "        tests['Article has \"author\" property'] = article.hasOwnProperty('author');",
+                  "        tests['Article has \"favorited\" property'] = article.hasOwnProperty('favorited');",
+                  "        tests['Article has \"favoritesCount\" property'] = article.hasOwnProperty('favoritesCount');",
+                  "        tests['favoritesCount is an integer'] = Number.isInteger(article.favoritesCount);",
+                  "    } else {",
+                  "        tests['articlesCount is 0 when recommendations are empty'] = responseJSON.articlesCount === 0;",
+                  "    }",
+                  "}",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/articles/recommended",
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Recommended Articles - No Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 401'] = responseCode.code === 401;"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/articles/recommended",
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
                 "description": ""
               }
             ],
@@ -1868,21 +1968,24 @@
           },
           "response": []
         },
-                {
+        {
           "name": "Update Article - Not Author",
-          "event": [{
-            "listen": "test",
-            "script": {
-              "type": "text/javascript",
-              "exec": [
-                "tests['Status code is 403'] = responseCode.code === 403;"
-              ]
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 403'] = responseCode.code === 403;"
+                ]
+              }
             }
-          }],
+          ],
           "request": {
             "url": "{{apiUrl}}/articles/{{slug}}",
             "method": "PUT",
-            "header": [{
+            "header": [
+              {
                 "key": "Content-Type",
                 "value": "application/json",
                 "description": ""
@@ -1908,19 +2011,22 @@
         },
         {
           "name": "Delete Article - Not Author",
-          "event": [{
-            "listen": "test",
-            "script": {
-              "type": "text/javascript",
-              "exec": [
-                "tests['Status code is 403'] = responseCode.code === 403;"
-              ]
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 403'] = responseCode.code === 403;"
+                ]
+              }
             }
-          }],
+          ],
           "request": {
             "url": "{{apiUrl}}/articles/{{slug}}",
             "method": "DELETE",
-            "header": [{
+            "header": [
+              {
                 "key": "Content-Type",
                 "value": "application/json",
                 "description": ""
