@@ -1831,10 +1831,61 @@
             "body": {},
             "description": ""
           },
-          "response": []
+        "response": []
+      },
+      {
+        "name": "Recommended Articles After Read",
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "var is200Response = responseCode.code === 200;",
+                "",
+                "tests['Response code is 200 OK'] = is200Response;",
+                "",
+                "if(is200Response){",
+                "    var responseJSON = JSON.parse(responseBody);",
+                "    var slug = postman.getEnvironmentVariable('slug');",
+                "    var allDifferent = responseJSON.articles.every(function(a){ return a.slug !== slug; });",
+                "    tests['Recommended articles do not contain viewed article'] = allDifferent;",
+                "}",
+                ""
+              ]
+            }
+          }
+        ],
+        "request": {
+          "url": "{{apiUrl}}/articles/recommended",
+          "method": "GET",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "description": ""
+            },
+            {
+              "key": "X-Requested-With",
+              "value": "XMLHttpRequest",
+              "description": ""
+            },
+            {
+              "key": "Authorization",
+              "value": "Token {{token}}",
+              "description": ""
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": ""
+          },
+          "description": ""
         },
-        {
-          "name": "Update Article",
+        "response": []
+      },
+      {
+        "name": "Update Article",
           "event": [
             {
               "listen": "test",
