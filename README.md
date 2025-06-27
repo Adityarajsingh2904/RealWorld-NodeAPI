@@ -16,7 +16,14 @@ This fork is restructured, refined, and maintained by Aditya Raj Singh.
 - 💬 Comments & Favoriting
 - 🧪 Postman-based Test Suite
 - 🐳 Docker Support for MongoDB
+- 📚 `GET /api/articles/recommended` endpoint for personalized article suggestions
 
+### Example
+
+```bash
+curl -H "Authorization: Token <jwt>" \
+  http://localhost:3000/api/articles/recommended?limit=5
+```
 ---
 
 ## 🗂 Project Structure
