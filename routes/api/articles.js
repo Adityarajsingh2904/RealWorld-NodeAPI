@@ -24,6 +24,13 @@ router.param('comment', function(req, res, next, id) {
   }).catch(next);
 });
 
+/**
+ * @route   GET /api/articles
+ * @desc    Get all articles with optional filters
+ * @access  Public
+ * @query   { tag?, author?, favorited?, limit?, offset? }
+ * @return  { articles: [], articlesCount: Number }
+ */
 // GET /api/articles
 router.get('/', auth.optional, function(req, res, next) {
   var query = {};
@@ -83,6 +90,13 @@ router.get('/', auth.optional, function(req, res, next) {
   }).catch(next);
 });
 
+/**
+ * @route   GET /api/articles/feed
+ * @desc    Get articles from followed users
+ * @access  Private
+ * @query   { limit?, offset? }
+ * @return  { articles: [], articlesCount: Number }
+ */
 // GET /api/articles/feed
 router.get('/feed', auth.required, function(req, res, next) {
   var limit = 20;
@@ -120,6 +134,13 @@ router.get('/feed', auth.required, function(req, res, next) {
   });
 });
 
+/**
+ * @route   POST /api/articles
+ * @desc    Create a new article
+ * @access  Private
+ * @body    { article: { title, description, body, tagList? } }
+ * @return  { article }
+ */
 // POST /api/articles
 router.post('/', auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user) {
@@ -134,6 +155,13 @@ router.post('/', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
+/**
+ * @route   GET /api/articles/:slug
+ * @desc    Get an article by slug
+ * @access  Public
+ * @param   {slug} article
+ * @return  { article }
+ */
 // GET /api/articles/:slug
 router.get('/:article', auth.optional, function(req, res, next) {
   Promise.all([
@@ -145,6 +173,14 @@ router.get('/:article', auth.optional, function(req, res, next) {
   }).catch(next);
 });
 
+/**
+ * @route   PUT /api/articles/:slug
+ * @desc    Update an existing article
+ * @access  Private
+ * @param   {slug} article
+ * @body    { article: { title?, description?, body?, tagList? } }
+ * @return  { article }
+ */
 // PUT /api/articles/:slug
 router.put('/:article', auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user) {
@@ -174,6 +210,13 @@ router.put('/:article', auth.required, function(req, res, next) {
   });
 });
 
+/**
+ * @route   DELETE /api/articles/:slug
+ * @desc    Delete an article
+ * @access  Private
+ * @param   {slug} article
+ * @return  204 No Content
+ */
 // DELETE /api/articles/:slug
 router.delete('/:article', auth.required, async function(req, res, next) {
   try {
@@ -191,6 +234,13 @@ router.delete('/:article', auth.required, async function(req, res, next) {
   }
 });
 
+/**
+ * @route   POST /api/articles/:slug/favorite
+ * @desc    Favorite an article
+ * @access  Private
+ * @param   {slug} article
+ * @return  { article }
+ */
 // POST /api/articles/:slug/favorite
 router.post('/:article/favorite', auth.required, function(req, res, next) {
   var articleId = req.article._id;
@@ -206,6 +256,13 @@ router.post('/:article/favorite', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
+/**
+ * @route   DELETE /api/articles/:slug/favorite
+ * @desc    Unfavorite an article
+ * @access  Private
+ * @param   {slug} article
+ * @return  { article }
+ */
 // DELETE /api/articles/:slug/favorite
 router.delete('/:article/favorite', auth.required, function(req, res, next) {
   var articleId = req.article._id;
@@ -221,6 +278,13 @@ router.delete('/:article/favorite', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
+/**
+ * @route   GET /api/articles/:slug/comments
+ * @desc    Get comments for an article
+ * @access  Public
+ * @param   {slug} article
+ * @return  { comments: [] }
+ */
 // GET /api/articles/:slug/comments
 router.get('/:article/comments', auth.optional, async function(req, res, next) {
   try {
@@ -241,6 +305,14 @@ router.get('/:article/comments', auth.optional, async function(req, res, next) {
   }
 });
 
+/**
+ * @route   POST /api/articles/:slug/comments
+ * @desc    Add a comment to an article
+ * @access  Private
+ * @param   {slug} article
+ * @body    { comment: { body } }
+ * @return  { comment }
+ */
 // POST /api/articles/:slug/comments
 router.post('/:article/comments', auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user) {
@@ -259,6 +331,14 @@ router.post('/:article/comments', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
+/**
+ * @route   DELETE /api/articles/:slug/comments/:id
+ * @desc    Delete a comment
+ * @access  Private
+ * @param   {slug} article
+ * @param   {id} comment
+ * @return  204 No Content
+ */
 // DELETE /api/articles/:slug/comments/:id
 router.delete('/:article/comments/:comment', auth.required, function(req, res, next) {
   if (req.comment.author.toString() === req.payload.id.toString()) {
