@@ -18,11 +18,40 @@ This fork is restructured, refined, and maintained by Aditya Raj Singh.
 - 🐳 Docker Support for MongoDB
 - 📚 `GET /api/articles/recommended` endpoint for personalized article suggestions
 
-### Example
+### Example request
+
+Fetch a list of up to 5 recommended articles for the authenticated user:
 
 ```bash
 curl -H "Authorization: Token <jwt>" \
   http://localhost:3000/api/articles/recommended?limit=5
+```
+
+### Example response
+
+```json
+{
+  "articles": [
+    {
+      "slug": "how-to-train-your-dragon",
+      "title": "How to train your dragon",
+      "description": "Ever wonder how?",
+      "body": "You have to believe",
+      "tagList": ["dragons", "training"],
+      "createdAt": "2023-01-01T00:00:00.000Z",
+      "updatedAt": "2023-01-01T00:00:00.000Z",
+      "favorited": false,
+      "favoritesCount": 0,
+      "author": {
+        "username": "jake",
+        "bio": "",
+        "image": null,
+        "following": false
+      }
+    }
+  ],
+  "articlesCount": 1
+}
 ```
 ---
 
