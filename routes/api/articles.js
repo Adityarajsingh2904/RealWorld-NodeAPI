@@ -260,7 +260,7 @@ router.post('/:article/comments', auth.required, function(req, res, next) {
 });
 
 // DELETE /api/articles/:slug/comments/:id
-router.delete('/:article/comments/:comment', auth.required, function(req, res, next) {
+router.delete('/:article/comments/:comment', auth.required, function(req, res, _next) {
   if (req.comment.author.toString() === req.payload.id.toString()) {
     req.article.comments.remove(req.comment._id);
     req.article.save()
