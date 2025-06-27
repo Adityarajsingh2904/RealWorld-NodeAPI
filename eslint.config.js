@@ -1,20 +1,34 @@
-const { FlatCompat } = require('eslint/use-at-your-own-risk');
-
-const compat = new FlatCompat();
-
 module.exports = [
-  ...compat.config({
-    env: {
-      es2021: true,
-      node: true
+  {
+    files: ['**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2021,
+      sourceType: 'script',
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        Buffer: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        module: 'readonly',
+        exports: 'readonly',
+        require: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        setImmediate: 'readonly',
+        clearImmediate: 'readonly',
+      queueMicrotask: 'readonly'
+      }
     },
-    extends: ['eslint:recommended'],
-    parserOptions: {
-      ecmaVersion: 12,
-      sourceType: 'script'
+    plugins: {
     },
     rules: {
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }]
+    },
+    linterOptions: {
+      reportUnusedDisableDirectives: true
     }
-  })
+  }
 ];
