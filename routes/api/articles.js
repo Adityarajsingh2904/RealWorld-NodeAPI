@@ -4,6 +4,7 @@ var Article = mongoose.model('Article');
 var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
 var auth = require('../auth');
+var recommendations = require('../../services/recommendations');
 
 // Preload article objects on routes with ':article'
 router.param('article', function(req, res, next, slug) {
@@ -135,6 +136,34 @@ router.get('/feed', auth.required, function(req, res, next) {
 });
 
 /**
+ * @route   GET /api/articles/recommended
+ * @desc    Get recommended articles for the current user
+ * @access  Private
+ * @query   { limit? }
+ * @return  { articles: [], articlesCount: Number }
+ */
+// GET /api/articles/recommended
+router.get('/recommended', auth.required, async function(req, res, next) {
+  try {
+    var limit = 10;
+    if (typeof req.query.limit !== 'undefined') {
+      limit = Number(req.query.limit);
+    }
+    const user = await User.findById(req.payload.id);
+    if (!user) return res.sendStatus(401);
+    const articles = await recommendations.getRecommendedArticles(user._id, limit);
+    return res.json({
+      articles: articles.map(function(article) {
+        return article.toJSONFor(user);
+      }),
+      articlesCount: articles.length
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
  * @route   POST /api/articles
  * @desc    Create a new article
  * @access  Private
@@ -169,6 +198,9 @@ router.get('/:article', auth.optional, function(req, res, next) {
     req.article.populate('author')
   ]).then(function(results) {
     var user = results[0];
+    if (user) {
+      recommendations.recordInteraction(user._id, req.article._id);
+    }
     return res.json({ article: req.article.toJSONFor(user) });
   }).catch(next);
 });
