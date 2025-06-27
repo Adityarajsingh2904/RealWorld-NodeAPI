@@ -192,17 +192,17 @@ router.post('/', auth.required, function(req, res, next) {
  * @return  { article }
  */
 // GET /api/articles/:slug
-router.get('/:article', auth.optional, function(req, res, next) {
-  Promise.all([
-    req.payload ? User.findById(req.payload.id) : null,
-    req.article.populate('author')
-  ]).then(function(results) {
-    var user = results[0];
+router.get('/:article', auth.optional, async function(req, res, next) {
+  try {
+    const user = req.payload ? await User.findById(req.payload.id) : null;
+    await req.article.populate('author');
     if (user) {
-      recommendations.recordInteraction(user._id, req.article._id);
+      await recommendations.recordInteraction(user._id, req.article._id);
     }
     return res.json({ article: req.article.toJSONFor(user) });
-  }).catch(next);
+  } catch (err) {
+    next(err);
+  }
 });
 
 /**
