@@ -15,6 +15,7 @@ if (!isProduction) {
 require('./models/User');
 require('./models/Article');
 require('./models/Comment');
+require('./models/Interaction');
 require('./config/passport');
 
 const server = app.listen(process.env.PORT || 3000, function () {});
