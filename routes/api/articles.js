@@ -292,7 +292,7 @@ router.get('/:article/comments', auth.optional, function(req, res, next){
           createdAt: 'desc'
         }
       }
-    }).execPopulate().then(function(article) {
+    }).execPopulate().then(function(_article) {
       return res.json({comments: req.article.comments.map(function(comment){
         return comment.toJSONFor(user);
       })});
@@ -319,7 +319,7 @@ router.post('/:article/comments', auth.required, function(req, res, next) {
     return comment.save().then(function(){
       req.article.comments.push(comment);
 
-      return req.article.save().then(function(article) {
+        return req.article.save().then(function(_article) {
         res.json({comment: comment.toJSONFor(user)});
       });
     });
@@ -334,7 +334,7 @@ router.post('/:article/comments', auth.required, function(req, res, next) {
  * @param   {id} comment
  * @return  204 No Content or 403 if forbidden
  */
-router.delete('/:article/comments/:comment', auth.required, function(req, res, next) {
+router.delete('/:article/comments/:comment', auth.required, function(req, res, _next) {
   if(req.comment.author.toString() === req.payload.id.toString()){
     req.article.comments.remove(req.comment._id);
     req.article.save()
