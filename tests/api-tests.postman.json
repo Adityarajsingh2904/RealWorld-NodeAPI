@@ -961,6 +961,64 @@
           "response": []
         },
         {
+          "name": "Recommended Articles - limit 5",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var is200Response = responseCode.code === 200;",
+                  "",
+                  "tests['Response code is 200 OK'] = is200Response;",
+                  "",
+                  "if(is200Response){",
+                  "    var responseJSON = JSON.parse(responseBody);",
+                  "",
+                  "    tests['Response contains \"articles\" property'] = responseJSON.hasOwnProperty('articles');",
+                  "    tests['Response contains \"articlesCount\" property'] = responseJSON.hasOwnProperty('articlesCount');",
+                  "    tests['articlesCount is an integer'] = Number.isInteger(responseJSON.articlesCount);",
+                  "    tests['Returned no more than 5 articles'] = responseJSON.articles.length <= 5;",
+                  "    var ordered = true;",
+                  "    for(var i=1; i<responseJSON.articles.length; i++){",
+                  "        ordered = ordered && new Date(responseJSON.articles[i-1].createdAt) >= new Date(responseJSON.articles[i].createdAt);",
+                  "    }",
+                  "    tests['Articles ordered by newest first'] = ordered;",
+                  "}",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/articles/recommended?limit=5",
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
           "name": "Recommended Articles - No Token",
           "event": [
             {
@@ -1131,6 +1189,78 @@
               {
                 "key": "Authorization",
                 "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "All Articles limit/offset",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var is200Response = responseCode.code === 200;",
+                  "",
+                  "tests['Response code is 200 OK'] = is200Response;",
+                  "",
+                  "if(is200Response){",
+                  "    var responseJSON = JSON.parse(responseBody);",
+                  "",
+                  "    tests['Response contains \"articles\" property'] = responseJSON.hasOwnProperty('articles');",
+                  "    tests['Response contains \"articlesCount\" property'] = responseJSON.hasOwnProperty('articlesCount');",
+                  "    tests['articlesCount is an integer'] = Number.isInteger(responseJSON.articlesCount);",
+                  "    tests['Returned no more than 1 article'] = responseJSON.articles.length <= 1;",
+                  "    var ordered = true;",
+                  "    for(var i=1; i<responseJSON.articles.length; i++){",
+                  "        ordered = ordered && new Date(responseJSON.articles[i-1].createdAt) >= new Date(responseJSON.articles[i].createdAt);",
+                  "    }",
+                  "    tests['Articles ordered by newest first'] = ordered;",
+                  "}",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": {
+              "raw": "{{apiUrl}}/articles?limit=1&offset=1",
+              "host": [
+                "{{apiUrl}}"
+              ],
+              "path": [
+                "articles"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "1"
+                },
+                {
+                  "key": "offset",
+                  "value": "1"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
                 "description": ""
               }
             ],
