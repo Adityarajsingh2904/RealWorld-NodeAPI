@@ -2438,6 +2438,42 @@
           "response": []
         },
         {
+          "name": "Create Comment for Article - No Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 401'] = responseCode.code === 401;"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/articles/{{slug}}/comments",
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"comment\":{\"body\":\"Thank you so much!\"}}"
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
           "name": "Delete Comment - No Token",
           "event": [
             {
