@@ -59,6 +59,7 @@
           "response": []
         },
         {
+
           "name": "Register - Invalid Email",
           "event": [
             {
@@ -112,6 +113,7 @@
             "method": "POST",
             "header": [
               {
+
                 "key": "Content-Type",
                 "value": "application/json",
                 "description": ""
@@ -124,7 +126,9 @@
             ],
             "body": {
               "mode": "raw",
+
               "raw": "{\"user\":{\"email\":\"short@jacob.com\", \"password\":\"short\", \"username\":\"short\"}}"
+
             },
             "description": ""
           },
@@ -227,6 +231,7 @@
           "response": []
         },
         {
+
           "name": "Login - Missing Email",
           "event": [
             {
@@ -316,6 +321,7 @@
             "method": "POST",
             "header": [
               {
+
                 "key": "Content-Type",
                 "value": "application/json",
                 "description": ""
@@ -328,13 +334,16 @@
             ],
             "body": {
               "mode": "raw",
+
               "raw": "{\"user\":{\"email\":\"second@user.com\", \"password\":\"secondpass\", \"username\":\"seconduser\"}}"
+
             },
             "description": ""
           },
           "response": []
         },
         {
+
           "name": "Login Second User",
           "event": [
             {
@@ -354,6 +363,7 @@
             "method": "POST",
             "header": [
               {
+
                 "key": "Content-Type",
                 "value": "application/json",
                 "description": ""
@@ -366,7 +376,9 @@
             ],
             "body": {
               "mode": "raw",
+
               "raw": "{\"user\":{\"email\":\"second@user.com\", \"password\":\"secondpass\"}}"
+
             },
             "description": ""
           },
@@ -735,6 +747,36 @@
               "mode": "raw",
               "raw": "{\"user\":{\"email\":\"john@jacob.com\", \"password\":\"johnnyjacob\", \"username\":\"johnjacob\"}}"
             },
+            "description": ""
+          },
+          "response": []
+        },
+                {
+          "name": "Feed - No Token",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "tests['Status code is 401'] = responseCode.code === 401;"
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/articles/feed",
+            "method": "GET",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {},
             "description": ""
           },
           "response": []
@@ -1815,6 +1857,82 @@
               {
                 "key": "Authorization",
                 "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "description": ""
+          },
+          "response": []
+        },
+                {
+          "name": "Update Article - Not Author",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "tests['Status code is 403'] = responseCode.code === 403;"
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/articles/{{slug}}",
+            "method": "PUT",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token2}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"article\":{\"body\":\"fail\"}}"
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Article - Not Author",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "tests['Status code is 403'] = responseCode.code === 403;"
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/articles/{{slug}}",
+            "method": "DELETE",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token2}}",
                 "description": ""
               }
             ],
