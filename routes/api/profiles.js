@@ -21,7 +21,7 @@ router.param('username', function(req, res, next, username){
  * @param   {username} username
  * @return  { profile }
  */
-router.get('/:username', auth.optional, function(req, res, next){
+router.get('/:username', auth.optional, function(req, res, _next){
   if(req.payload){
     User.findById(req.payload.id).then(function(user){
       if(!user){ return res.json({profile: req.profile.toProfileJSONFor(false)}); }
