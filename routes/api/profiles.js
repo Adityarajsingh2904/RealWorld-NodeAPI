@@ -14,7 +14,14 @@ router.param('username', function(req, res, next, username){
   }).catch(next);
 });
 
-router.get('/:username', auth.optional, function(req, res, next){
+/**
+ * @route   GET /api/profiles/:username
+ * @desc    Get a user's profile
+ * @access  Public (token optional for following info)
+ * @param   {username} username
+ * @return  { profile }
+ */
+router.get('/:username', auth.optional, function(req, res, _next){
   if(req.payload){
     User.findById(req.payload.id).then(function(user){
       if(!user){ return res.json({profile: req.profile.toProfileJSONFor(false)}); }
@@ -26,6 +33,13 @@ router.get('/:username', auth.optional, function(req, res, next){
   }
 });
 
+/**
+ * @route   POST /api/profiles/:username/follow
+ * @desc    Follow a user
+ * @access  Private
+ * @param   {username} username
+ * @return  { profile }
+ */
 router.post('/:username/follow', auth.required, function(req, res, next){
   var profileId = req.profile._id;
 
@@ -38,6 +52,13 @@ router.post('/:username/follow', auth.required, function(req, res, next){
   }).catch(next);
 });
 
+/**
+ * @route   DELETE /api/profiles/:username/follow
+ * @desc    Unfollow a user
+ * @access  Private
+ * @param   {username} username
+ * @return  { profile }
+ */
 router.delete('/:username/follow', auth.required, function(req, res, next){
   var profileId = req.profile._id;
 

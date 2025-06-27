@@ -5,6 +5,12 @@ var { check, validationResult } = require('express-validator');
 var User = mongoose.model('User');
 var auth = require('../auth');
 
+/**
+ * @route   GET /api/user
+ * @desc    Get current logged-in user's info
+ * @access  Private (requires JWT token)
+ * @return  { user: { email, token, username, bio, image } }
+ */
 router.get('/user', auth.required, function(req, res, next){
   User.findById(req.payload.id).then(function(user){
     if(!user){ return res.sendStatus(401); }
@@ -13,6 +19,13 @@ router.get('/user', auth.required, function(req, res, next){
   }).catch(next);
 });
 
+/**
+ * @route   PUT /api/user
+ * @desc    Update current user's profile fields
+ * @access  Private (requires JWT token)
+ * @body    { user: { username?, email?, bio?, image?, password? } }
+ * @return  { user: { email, token, username, bio, image } }
+ */
 router.put('/user', auth.required, function(req, res, next){
   User.findById(req.payload.id).then(function(user){
     if(!user){ return res.sendStatus(401); }
@@ -40,6 +53,13 @@ router.put('/user', auth.required, function(req, res, next){
   }).catch(next);
 });
 
+/**
+ * @route   POST /api/users/login
+ * @desc    Authenticate user and return JWT
+ * @access  Public
+ * @body    { user: { email, password } }
+ * @return  { user: { token, email, username, bio, image } }
+ */
 router.post('/users/login', function(req, res, next){
   if(!req.body.user.email){
     return res.status(422).json({errors: {email: "can't be blank"}});
@@ -61,6 +81,13 @@ router.post('/users/login', function(req, res, next){
   })(req, res, next);
 });
 
+/**
+ * @route   POST /api/users
+ * @desc    Register a new user
+ * @access  Public
+ * @body    { user: { username, email, password } }
+ * @return  { user: { token, email, username, bio?, image? } }
+ */
 router.post(
   '/users',
   [check('email').isEmail(), check('password').isLength({ min: 6 })],

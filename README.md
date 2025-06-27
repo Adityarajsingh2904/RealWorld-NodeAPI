@@ -49,6 +49,7 @@ RealWorld-NodeAPI/
 ```bash
 git clone https://github.com/Adityarajsingh2904/RealWorld-NodeAPI.git
 cd RealWorld-NodeAPI
+cp .env.example .env # create your environment file
 npm install
 npm run dev
 ```
@@ -64,6 +65,7 @@ npm run mongo:start
 ## 📮 API Testing
 
 ```bash
+npm install -g newman
 npm test
 ```
 
