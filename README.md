@@ -37,7 +37,7 @@ RealWorld-NodeAPI/
 ├── routes/              # Express route controllers
 ├── models/              # Mongoose schemas
 ├── tests/               # Postman tests
-├── .travis.yml
+├── .github/workflows/ci.yml # GitHub Actions
 ├── package.json
 ```
 
