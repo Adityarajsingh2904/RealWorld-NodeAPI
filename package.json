@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A Medium-like blogging backend built with Node.js, Express, and MongoDB",
   "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "mongo:start": "docker run --name realworld-mongo -p 27017:27017 mongo & sleep 5",
     "start": "node ./server.js",
