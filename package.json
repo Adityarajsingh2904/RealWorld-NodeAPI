@@ -10,7 +10,7 @@
     "mongo:start": "docker run --name realworld-mongo -p 27017:27017 mongo & sleep 5",
     "start": "node ./server.js",
     "dev": "nodemon ./server.js",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint -c .eslintrc.cjs .",
+    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint .",
     "test": "newman run ./tests/api-tests.postman.json -e ./tests/env-api-tests.postman.json",
     "stop": "lsof -ti :3000 | xargs kill",
     "mongo:stop": "docker stop realworld-mongo && docker rm realworld-mongo"
