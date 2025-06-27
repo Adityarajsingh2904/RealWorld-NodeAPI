@@ -47,7 +47,8 @@
   },
   "devDependencies": {
     "newman": "^6.0.0",
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.0.2",
+    "eslint": "^9.0.0"
   },
   "author": "Aditya Raj Singh <thisis.adityarajsingh@gmail.com>"
 }
