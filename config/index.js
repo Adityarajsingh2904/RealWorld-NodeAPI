@@ -1,4 +1,8 @@
-module.exports = {
-  secret: process.env.JWT_SECRET,
-  mongoURI: process.env.MONGO_URI
-};
+require('dotenv').config();
+const app = require('./app');
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
