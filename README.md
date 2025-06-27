@@ -40,7 +40,7 @@ RealWorld-NodeAPI/
 
 ### Requirements
 
-- Node.js ≥ 14
+- Node.js ≥ 18
 - MongoDB (local or Docker)
 - Postman (optional for testing)
 
