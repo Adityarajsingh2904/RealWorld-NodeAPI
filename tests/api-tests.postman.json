@@ -703,6 +703,78 @@
           },
           "response": []
         }
+        ,{
+          "name": "Register - Duplicate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 422'] = responseCode.code === 422;"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/users",
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"john@jacob.com\", \"password\":\"johnnyjacob\", \"username\":\"johnjacob\"}}"
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Invalid Credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 422'] = responseCode.code === 422;"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/users/login",
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"john@jacob.com\", \"password\":\"wrongpass\"}}"
+            },
+            "description": ""
+          },
+          "response": []
+        }
       ]
     },
     {
@@ -2344,6 +2416,80 @@
             "description": ""
           },
           "response": []
+        },
+        {
+          "name": "Single Article - Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 404'] = responseCode.code === 404;"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/articles/nonexistent-article",
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              }
+            ],
+            "body": {},
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Update Article - Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 404'] = responseCode.code === 404;"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/articles/nonexistent-article",
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"article\":{\"title\":\"Not Found\"}}"
+            },
+            "description": ""
+          },
+          "response": []
         }
       ]
     },
@@ -2499,6 +2645,44 @@
           "request": {
             "url": "{{apiUrl}}/profiles/johnjacob/follow",
             "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {},
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Profile - Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "tests['Status code is 404'] = responseCode.code === 404;"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "url": "{{apiUrl}}/profiles/unknownuser",
+            "method": "GET",
             "header": [
               {
                 "key": "Content-Type",
